@@ -1,0 +1,21 @@
+{
+  "name": "typescript2python",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.7",
+    "@babel/node": "^7.22.19",
+    "@babel/preset-env": "^7.23.7",
+    "@babel/preset-typescript": "^7.23.3",
+    "@types/node": "^20.10.6"
+  },
+  "scripts": {
+    "watch": "babel-node --watch -x .ts --",
+    "single": "babel-node -x .ts",
+    "develop": "yarn watch src/index.ts"
+  }
+}
