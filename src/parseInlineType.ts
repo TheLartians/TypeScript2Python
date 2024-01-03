@@ -1,7 +1,7 @@
 import * as ts from "typescript";
 import { ParserState } from "./ParserState";
 import { newHelperTypeName } from "./newHelperTypeName";
-import { parseTypeDefinition } from "./parseExports";
+import { parseTypeDefinition } from "./parseTypeDefinition";
 
 export const parseInlineType = (state: ParserState, type: ts.Type) => {
   const result = tryToParseInlineType(state, type);
@@ -11,6 +11,7 @@ export const parseInlineType = (state: ParserState, type: ts.Type) => {
     throw new Error(`could not parse type`);
   }
 };
+
 export const tryToParseInlineType = (
   state: ParserState,
   type: ts.Type,
@@ -25,11 +26,18 @@ export const tryToParseInlineType = (
     return `Union[${type.types
       .map((v) => parseInlineType(state, v))
       .join(",")}]`;
-  } else if (state.typechecker.isArrayType(type)) {
+  } else if (state.typechecker.isTupleType(type)) {
+    return `Tuple[${state.typechecker
+      .getTypeArguments(type as ts.TypeReference)
+      .map((v) => parseInlineType(state, v))
+      .join(",")}]`;
+  } else if (state.typechecker.isArrayLikeType(type)) {
     return `List[${state.typechecker
       .getTypeArguments(type as ts.TypeReference)
       .map((v) => parseInlineType(state, v))
       .join(",")}]`;
+  } else if (type.getStringIndexType()) {
+    return `Dict[str, ${parseInlineType(state, type.getStringIndexType()!)}]`;
   } else {
     // assume interface or object
     if (!globalScope) {

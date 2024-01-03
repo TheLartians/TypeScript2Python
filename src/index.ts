@@ -6,6 +6,9 @@ import { parseExports } from "./parseExports";
 function compile(fileNames: string[]): void {
   const program = ts.createProgram(fileNames, {
     noEmit: true,
+    allowJs: true,
+    resolveJsonModule: true,
+    skipLibCheck: true,
   });
 
   const relevantSourceFiles = program
@@ -36,7 +39,7 @@ function compile(fileNames: string[]): void {
   };
 
   state.statements.push(
-    `from typing_extensions import Literal, TypedDict, List, Union, NotRequired, Optional, Any`,
+    `from typing_extensions import Literal, TypedDict, List, Union, NotRequired, Optional, Tuple, Dict, Any`,
   );
 
   relevantSourceFiles.forEach((f) => {

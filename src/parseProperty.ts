@@ -1,6 +1,6 @@
 import * as ts from "typescript";
 import { ParserState } from "./ParserState";
-import { parseInlineType } from "./tryToParseInlineType";
+import { parseInlineType } from "./parseInlineType";
 
 export const parseProperty = (state: ParserState, symbol: ts.Symbol) => {
   const name = symbol.getName();
@@ -11,18 +11,14 @@ export const parseProperty = (state: ParserState, symbol: ts.Symbol) => {
   const documentationSuffix = documentation
     ? `\n  """\n  ${documentation.replaceAll("\n", "\n  ")}\n  """`
     : "";
+  const definition = parseInlineType(
+    state,
+    state.typechecker.getTypeOfSymbol(symbol),
+  );
 
-  if (symbol.declarations?.length === 1) {
-    const definition = parseInlineType(
-      state,
-      state.typechecker.getTypeAtLocation(symbol.declarations[0]!),
-    );
-    if (symbol.flags & ts.SymbolFlags.Optional) {
-      return `${name}: NotRequired[Optional[${definition}]]${documentationSuffix}`;
-    } else {
-      return `${name}: ${definition}${documentationSuffix}`;
-    }
+  if (symbol.flags & ts.SymbolFlags.Optional) {
+    return `${name}: NotRequired[Optional[${definition}]]${documentationSuffix}`;
   } else {
-    throw new Error("property has unexpected number of declarations");
+    return `${name}: ${definition}${documentationSuffix}`;
   }
 };
