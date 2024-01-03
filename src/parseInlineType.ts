@@ -31,17 +31,22 @@ export const tryToParseInlineType = (
       .getTypeArguments(type as ts.TypeReference)
       .map((v) => parseInlineType(state, v))
       .join(",")}]`;
-  } else if (state.typechecker.isArrayLikeType(type)) {
-    return `List[${state.typechecker
-      .getTypeArguments(type as ts.TypeReference)
-      .map((v) => parseInlineType(state, v))
-      .join(",")}]`;
   } else if (type.getStringIndexType()) {
     return `Dict[str, ${parseInlineType(state, type.getStringIndexType()!)}]`;
+  } else if (state.typechecker.isArrayLikeType(type)) {
+    const typeArguments = state.typechecker.getTypeArguments(
+      type as ts.TypeReference,
+    );
+    if (typeArguments.length === 1) {
+      return `List[${parseInlineType(state, typeArguments[0]!)}]`;
+    } else {
+      // TODO: figure out why we reach this and replace with correct type definition
+      return `List[object]`;
+    }
   } else {
     // assume interface or object
     if (!globalScope) {
-      const helperName = newHelperTypeName(state);
+      const helperName = newHelperTypeName(state, type);
       state.statements.push(parseTypeDefinition(state, helperName, type));
       return helperName;
     } else {
