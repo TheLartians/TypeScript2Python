@@ -18,7 +18,7 @@ jobs:
 
       - name: Publish
         if: github.ref == 'refs/heads/master'
-        uses: mikeal/merge-release@4.3.0
+        uses: mikeal/merge-release@v4.3.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
