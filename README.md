@@ -10,14 +10,7 @@ This project implements a transpiler for creating [pyright](https://github.com/m
 
 ## Example
 
-<table width="100%">
-<tr>
-<th>TypeScript</th>
-<th>TypeScript2Python</th>
-</tr>
-<tr>
-<td width="50%">
-
+### TypeScript
 ```ts
 export type Foo = {
     type: "foo"
@@ -42,8 +35,7 @@ export type FooBarMap = {
 }
 ```
 
-</td>
-<td width="50%">
+### TypeScript2Python
 
 ```python
 from typing_extensions import Literal, TypedDict, List, Union, NotRequired, Optional, Tuple, Dict, Any
@@ -69,10 +61,6 @@ class Bar(TypedDict):
 
 FooBarMap = Dict[str,Union[Foo,Bar]]
 ```
-
-</td>
-</tr>
-</table>
 
 
 ## Usage
