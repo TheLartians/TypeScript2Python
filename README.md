@@ -2,11 +2,13 @@
 
 ## About
 
-This project implements a transpiler for creating [pyright](https://github.com/microsoft/pyright) compatible type declarations automatically from TypeScript code! This is useful in a number of scenarios.
+This project implements a transpiler for creating [pyright](https://github.com/microsoft/pyright) compatible type declarations automatically from TypeScript code! 
+This is useful in a number of scenarios.
+For example:
 
 - Automatic generation of type-safe APIs between Node.js and Python services
 - Safely use JSON objects created by TypeScript projects in Python
-- A much nicer way to write complex types using Python
+- A nice way to write complex Python types using TypeScript 
 
 ## Example
 
@@ -18,14 +20,12 @@ export type Foo = {
     optional?: string
 }
 
-/** 
- * DocStrings are supported!
- **/
+/** DocStrings are supported! */
 export type Bar = {
     type: "bar"
     bar: string
+    /** nested objects need extra declarations in Python */
     nested: { 
-        /** nested objects need extra declarations in Python */
         foo: Foo
     }
 }
@@ -47,9 +47,6 @@ class Foo(TypedDict):
 
 class __HelperType1__(TypedDict):
   foo: Foo
-  """
-  nested objects need extra declarations in Python
-  """
 
 class Bar(TypedDict):
   """
@@ -58,6 +55,9 @@ class Bar(TypedDict):
   type: Literal["bar"]
   bar: str
   nested: __HelperType1__
+  """
+  nested objects need extra declarations in Python
+  """
 
 FooBarMap = Dict[str,Union[Foo,Bar]]
 ```
