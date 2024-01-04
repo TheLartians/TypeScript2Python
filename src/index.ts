@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import * as ts from "typescript";
 import path from "path";
 import { program } from "@commander-js/extra-typings";
