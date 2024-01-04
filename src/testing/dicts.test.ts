@@ -51,6 +51,13 @@ class A(TypedDict):
   extra: float`,
     );
   });
+
+  it("can transpile intersections", async () => {
+    const result = await transpileString(
+      `export type A = { foo: string } & { bar: number }`,
+    );
+    expect(result).toContain(`class A(TypedDict):\n  foo: str\n  bar: float`);
+  });
 });
 
 export type T = Record<string, string>;
