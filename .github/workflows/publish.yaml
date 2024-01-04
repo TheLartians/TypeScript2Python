@@ -17,7 +17,7 @@ jobs:
         run: yarn install
 
       - name: Publish
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         uses: Github-Actions-Community/merge-release@v6.0.7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
