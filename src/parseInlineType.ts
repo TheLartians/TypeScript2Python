@@ -18,6 +18,7 @@ export const tryToParseInlineType = (
   globalScope?: boolean,
 ): string | undefined => {
   const known = state.knownTypes.get(type);
+  
   if (known !== undefined) {
     return known;
   } else if (type.isLiteral()) {
@@ -31,8 +32,8 @@ export const tryToParseInlineType = (
       .getTypeArguments(type as ts.TypeReference)
       .map((v) => parseInlineType(state, v))
       .join(",")}]`;
-  } else if (type.getStringIndexType()) {
-    return `Dict[str, ${parseInlineType(state, type.getStringIndexType()!)}]`;
+  } else if (type.getStringIndexType() !== undefined) {
+    return `Dict[str,${parseInlineType(state, type.getStringIndexType()!)}]`;
   } else if (state.typechecker.isArrayLikeType(type)) {
     const typeArguments = state.typechecker.getTypeArguments(
       type as ts.TypeReference,
@@ -41,7 +42,7 @@ export const tryToParseInlineType = (
       return `List[${parseInlineType(state, typeArguments[0]!)}]`;
     } else {
       // TODO: figure out why we reach this and replace with correct type definition
-      return `List[object]`;
+      return `object`;
     }
   } else {
     // assume interface or object

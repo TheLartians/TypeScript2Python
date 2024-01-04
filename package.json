@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "@commander-js/extra-typings": "^11.1.0",
     "typescript": "^5.3.3"
   },
   "devDependencies": {
@@ -11,18 +12,26 @@
     "@babel/node": "^7.22.19",
     "@babel/preset-env": "^7.23.7",
     "@babel/preset-typescript": "^7.23.3",
+    "@ts-morph/bootstrap": "^0.22.0",
+    "@types/jest": "^29.5.11",
     "@types/node": "^20.10.6",
     "@typescript-eslint/eslint-plugin": "^6.17.0",
     "@typescript-eslint/parser": "^6.17.0",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.2",
+    "jest": "^29.7.0",
     "prettier": "^3.1.1"
   },
   "scripts": {
     "watch": "babel-node --watch -x .ts --",
     "single": "babel-node -x .ts",
     "develop": "yarn watch src/index.ts",
-    "lint": "eslint src/**/*.ts"
+    "lint": "eslint src/**/*.ts",
+    "build": "tsc -p .",
+    "test": "jest"
+  },
+  "bin": {
+    "typescript2python": "./dist/index.js"
   }
 }

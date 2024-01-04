@@ -12,7 +12,8 @@
       "isolatedModules": true,
       "downlevelIteration": true,
       "noUncheckedIndexedAccess": true,
-      "noImplicitAny": true
+      "noImplicitAny": true,
+      "outDir": "dist"
     },
     "include": ["src"],
     "exclude": ["./node_modules"]
