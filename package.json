@@ -30,7 +30,8 @@
     "lint": "eslint src/**/*.ts",
     "build": "tsc -p .",
     "test": "jest",
-    "typecheck": "tsc -p . --noEmit"
+    "typecheck": "tsc -p . --noEmit",
+    "prepack": "yarn build"
   },
   "bin": {
     "typescript2python": "./dist/index.js"
