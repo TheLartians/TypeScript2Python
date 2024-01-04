@@ -29,7 +29,8 @@
     "develop": "yarn watch src/index.ts",
     "lint": "eslint src/**/*.ts",
     "build": "tsc -p .",
-    "test": "jest"
+    "test": "jest",
+    "typecheck": "tsc -p . --noEmit"
   },
   "bin": {
     "typescript2python": "./dist/index.js"

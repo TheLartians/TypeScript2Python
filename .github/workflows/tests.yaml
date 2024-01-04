@@ -1,0 +1,32 @@
+name: Unit tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      # install dependencies
+      - run: yarn install
+      # build app
+      - run: yarn build
+      # check if lockfile is up to date
+      - run: git diff --exit-code yarn.lock
+      # run the typechecker
+      - run: yarn typecheck
+      # run unit tests
+      - run: yarn test
+      # run linter
+      - run: yarn lint --max-warnings=0
