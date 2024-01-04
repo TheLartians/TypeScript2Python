@@ -1,0 +1,24 @@
+
+on:
+  push:
+    branches: [ main ]
+        
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+    
+      - name: install
+        run: yarn install
+
+      - name: Publish
+        if: github.ref == 'refs/heads/master'
+        uses: mikeal/merge-release@4.3.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
