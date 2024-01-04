@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
       "target": "esnext",
+      "noEmit": true,
       "allowJs": true,
       "skipLibCheck": true,
       "strict": true,
