@@ -28,11 +28,11 @@ describe("transpiling referenced types", () => {
     expect(transpiled).toEqual(
       `from typing_extensions import Literal, TypedDict, List, Union, NotRequired, Optional, Tuple, Dict, Any
 
-class __HelperType1__Foo(TypedDict):
+class Ts2PyFooHelperType1(TypedDict):
   foo: float
 
 class Bar(TypedDict):
-  foo: __HelperType1__Foo`,
+  foo: Ts2PyFooHelperType1`,
     );
   });
 });
