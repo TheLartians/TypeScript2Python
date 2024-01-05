@@ -3,8 +3,7 @@ import { ParserState } from "./ParserState";
 import { parseProperty } from "./parseProperty";
 import { getDocumentationStringForType } from "./getDocumentationStringForType";
 import { tryToParseInlineType } from "./parseInlineType";
-
-const validNameRegex = /^[a-zA-Z_$][\w$]*$/;
+import { isValidPythonIdentifier } from "./isValidPythonIdentifier";
 
 export const parseTypeDefinition = (
   state: ParserState,
@@ -26,7 +25,7 @@ export const parseTypeDefinition = (
   } else {
     const properties = type
       .getProperties()
-      .filter((v) => v.getName().match(validNameRegex))
+      .filter((v) => isValidPythonIdentifier(v.getName()))
       .map((v) => parseProperty(state, v));
 
     return `class ${name}(TypedDict):${

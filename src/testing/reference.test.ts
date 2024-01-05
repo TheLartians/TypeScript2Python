@@ -10,15 +10,15 @@ describe("transpiling referenced types", () => {
     expect(result).toEqual(
       `from typing_extensions import Literal, TypedDict, List, Union, NotRequired, Optional, Tuple, Dict, Any
 
-class __HelperType1__A(TypedDict):
+class Ts2PyAHelperType1(TypedDict):
   foo: float
 
-class __HelperType2__(TypedDict):
+class Ts2PyHelperType2(TypedDict):
   bar: str
 
 class C(TypedDict):
   flat: float
-  outer: Union[__HelperType1__A,Dict[str,bool],__HelperType2__]`,
+  outer: Union[Ts2PyAHelperType1,Dict[str,bool],Ts2PyHelperType2]`,
     );
   });
 });

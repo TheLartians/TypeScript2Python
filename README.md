@@ -45,7 +45,7 @@ class Foo(TypedDict):
   foo: List[float]
   optional: NotRequired[Optional[str]]
 
-class __HelperType1__(TypedDict):
+class Ts2PyHelperType1(TypedDict):
   foo: Foo
 
 class Bar(TypedDict):
@@ -54,7 +54,7 @@ class Bar(TypedDict):
   """
   type: Literal["bar"]
   bar: str
-  nested: __HelperType1__
+  nested: Ts2PyHelperType1
   """
   nested objects need extra declarations in Python
   """
