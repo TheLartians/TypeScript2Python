@@ -81,6 +81,17 @@ TypeScript2Python supports many of TypeScripts type constructs, including:
 
 - Basic types, like `boolean`, `number`, `string`, `undefined`
 - Literal types, e.g. `type X = 42`, `type Y = 'test'`
-- Object types, `{ foo: string }` 
+- Object types, `{ foo: string }`
+- Unions, `string | number`
+- Arrays, `boolean[]`
 - Nested objects `{ bar: { foo: string } }`, that will get transpiled into helper dictionaries
 - Optional properties `{ optional?: number }`, that get transpiled to `NotRequired[Optional[...]]` attributes
+- Docstrings `/** this is very useful */`
+
+## Limitations
+
+We currently do not support the following features:
+
+- Generics, as they cannot be fully supported by Python
+- Function signatures, as we restrict ourselves top serializable data
+- Values, as this is an extremely difficult problem and we currently only attempt to transpile types
