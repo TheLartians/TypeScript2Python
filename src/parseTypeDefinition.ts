@@ -10,12 +10,6 @@ export const parseTypeDefinition = (
   name: string,
   type: ts.Type,
 ) => {
-  
-  if ((type.getFlags() & ts.TypeFlags.TypeParameter) !== 0) {
-    // we don't support types with generic type parameters
-    return;
-  }
-
   const inlineType = tryToParseInlineType(state, type, true);
   const documentation = getDocumentationStringForType(state.typechecker, type);
 

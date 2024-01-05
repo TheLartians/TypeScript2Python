@@ -5,7 +5,7 @@ describe("transpiling generic types", () => {
     const transpiled = await transpileString(
       `export type Generic<T extends string> = T;`,
     );
-    expect(transpiled).not.toContain("Generic");
+    expect(transpiled).toContain("Generic = object");
   });
 
   it("does transpile fully narrowed generic types", async () => {
@@ -13,7 +13,7 @@ describe("transpiling generic types", () => {
       export type Generic<T extends string> = T;
       export type Narrowed = Generic<string>;
     `);
-    expect(transpiled).not.toContain("Generic");
+    expect(transpiled).toContain("Generic = object");
     expect(transpiled).toContain("Narrowed = str");
   });
 });
