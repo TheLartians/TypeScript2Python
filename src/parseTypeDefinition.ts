@@ -10,28 +10,37 @@ export const parseTypeDefinition = (
   name: string,
   type: ts.Type,
 ) => {
+  
+  if ((type.getFlags() & ts.TypeFlags.TypeParameter) !== 0) {
+    // we don't support types with generic type parameters
+    return;
+  }
+
   const inlineType = tryToParseInlineType(state, type, true);
   const documentation = getDocumentationStringForType(state.typechecker, type);
 
   if (!state.knownTypes.has(type)) {
-    // prevent recursions
+    // we set the currently parsed type here to prevent recursions
     state.knownTypes.set(type, name);
   }
 
   if (inlineType) {
-    return `${name} = ${inlineType}${
+    const definition = `${name} = ${inlineType}${
       documentation ? `\n"""\n${documentation}\n"""` : ""
     }`;
+    state.statements.push(definition);
   } else {
     const properties = type
       .getProperties()
       .filter((v) => isValidPythonIdentifier(v.getName()))
       .map((v) => parseProperty(state, v));
 
-    return `class ${name}(TypedDict):${
+      const definition = `class ${name}(TypedDict):${
       documentation
         ? `\n  """\n  ${documentation.replaceAll("\n", "  \n")}\n  """`
         : ""
     }\n  ${properties.length > 0 ? properties.join(`\n  `) : "pass"}`;
+
+    state.statements.push(definition);
   }
 };

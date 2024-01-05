@@ -59,5 +59,3 @@ class A(TypedDict):
     expect(result).toContain(`class A(TypedDict):\n  foo: str\n  bar: float`);
   });
 });
-
-export type T = Record<string, string>;
