@@ -21,6 +21,9 @@ export const tryToParseInlineType = (
   
   if (known !== undefined) {
     return known;
+  } else if (type.getFlags() & (ts.TypeFlags.TypeParameter | ts.TypeFlags.TypeVariable)) {
+    // we don't support types with generic type parameters
+    return `object`;
   } else if (type.isLiteral()) {
     return `Literal[${JSON.stringify(type.value)}]`;
   } else if (type.isUnion()) {
