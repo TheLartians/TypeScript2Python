@@ -48,10 +48,10 @@ export const tryToParseInlineType = (
     // assume interface or object
     if (!globalScope) {
       const helperName = newHelperTypeName(state, type);
-      state.statements.push(parseTypeDefinition(state, helperName, type));
+      parseTypeDefinition(state, helperName, type);
       return helperName;
     } else {
-      // needs to be defined outside
+      // type cannot be defined inline
       return undefined;
     }
   }

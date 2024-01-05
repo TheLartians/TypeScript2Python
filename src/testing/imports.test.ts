@@ -36,5 +36,3 @@ class Bar(TypedDict):
     );
   });
 });
-
-export type T = Record<string, string>;

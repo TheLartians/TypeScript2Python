@@ -14,8 +14,7 @@ export function parseExports(state: ParserState, sourceFile: ts.SourceFile) {
       if (isExported) {
         const name = statement.name.getText();
         const type = state.typechecker.getTypeAtLocation(statement);
-        const definition = parseTypeDefinition(state, name, type);
-        state.statements.push(definition);
+        parseTypeDefinition(state, name, type);
       }
     }
   }

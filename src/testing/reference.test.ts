@@ -22,5 +22,3 @@ class C(TypedDict):
     );
   });
 });
-
-export type T = Record<string, string>;
