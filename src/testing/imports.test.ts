@@ -26,7 +26,7 @@ describe("transpiling referenced types", () => {
       barSource,
     ]);
     expect(transpiled).toEqual(
-      `from typing_extensions import Literal, TypedDict, List, Union, NotRequired, Optional, Tuple, Dict, Any
+      `from typing_extensions import TypedDict
 
 class Ts2PyFooHelperType1(TypedDict):
   foo: float

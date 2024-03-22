@@ -1,4 +1,4 @@
-import * as ts from "typescript";
+import ts from "typescript";
 import { ParserState } from "./ParserState";
 import { parseProperty } from "./parseProperty";
 import { getDocumentationStringForType } from "./getDocumentationStringForType";
@@ -24,6 +24,8 @@ export const parseTypeDefinition = (
     }`;
     state.statements.push(definition);
   } else {
+    state.imports.add("TypedDict");
+
     const properties = type
       .getProperties()
       .filter((v) => isValidPythonIdentifier(v.getName()))

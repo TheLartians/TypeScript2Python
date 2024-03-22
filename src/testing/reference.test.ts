@@ -8,7 +8,7 @@ describe("transpiling referenced types", () => {
       export type C = { flat: number, outer: B }
     `);
     expect(result).toEqual(
-      `from typing_extensions import Literal, TypedDict, List, Union, NotRequired, Optional, Tuple, Dict, Any
+      `from typing_extensions import Dict, TypedDict, Union
 
 class Ts2PyAHelperType1(TypedDict):
   foo: float

@@ -1,4 +1,4 @@
-import * as ts from "typescript";
+import ts from "typescript";
 import { ParserState } from "./ParserState";
 import { parseInlineType } from "./parseInlineType";
 
@@ -17,6 +17,8 @@ export const parseProperty = (state: ParserState, symbol: ts.Symbol) => {
   );
 
   if (symbol.flags & ts.SymbolFlags.Optional) {
+    state.imports.add("NotRequired");
+    state.imports.add("Optional");
     return `${name}: NotRequired[Optional[${definition}]]${documentationSuffix}`;
   } else {
     return `${name}: ${definition}${documentationSuffix}`;
