@@ -34,7 +34,7 @@ export type FooBarMap = {
     [key: string]: Foo | Bar
 }
 
-export type Tuple = [string, Foo | Bar, any[]]
+export type TupleType = [string, Foo | Bar, any[]]
 ```
 
 ### TypeScript2Python
@@ -63,7 +63,7 @@ class Bar(TypedDict):
 
 FooBarMap = Dict[str,Union[Foo,Bar]]
 
-Tuple = Tuple[str,Union[Foo,Bar],List[Any]]
+TupleType = Tuple[str,Union[Foo,Bar],List[Any]]
 ```
 
 
