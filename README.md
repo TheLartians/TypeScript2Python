@@ -33,12 +33,14 @@ export type Bar = {
 export type FooBarMap = { 
     [key: string]: Foo | Bar
 }
+
+export type Tuple = [string, Foo | Bar, any[]]
 ```
 
 ### TypeScript2Python
 
 ```python
-from typing_extensions import Literal, TypedDict, List, Union, NotRequired, Optional, Tuple, Dict, Any
+from typing_extensions import Any, Dict, List, Literal, NotRequired, Optional, Tuple, TypedDict, Union
 
 class Foo(TypedDict):
   type: Literal["foo"]
@@ -60,6 +62,8 @@ class Bar(TypedDict):
   """
 
 FooBarMap = Dict[str,Union[Foo,Bar]]
+
+Tuple = Tuple[str,Union[Foo,Bar],List[Any]]
 ```
 
 

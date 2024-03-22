@@ -1,5 +1,5 @@
 import { ParserState } from "./ParserState";
-import * as ts from "typescript";
+import ts from "typescript";
 
 export const newHelperTypeName = (state: ParserState, type?: ts.Type) => {
   const typeName = type?.aliasSymbol?.getName() ?? "";
