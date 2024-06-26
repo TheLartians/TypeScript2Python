@@ -41,6 +41,10 @@ describe("transpiling basic types", () => {
     ],
     ["export type T = any;", "from typing_extensions import Any\n\nT = Any"],
     [
+      "export type T = unknown;",
+      "from typing_extensions import Any\n\nT = Any",
+    ],
+    [
       "export type T = {[key: string]: {[key: string]: number}};",
       "from typing_extensions import Dict\n\nT = Dict[str,Dict[str,float]]",
     ],
