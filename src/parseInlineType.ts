@@ -1,4 +1,4 @@
-import ts from "typescript";
+import ts, { TypeFlags } from "typescript";
 import { ParserState, createNewParserState } from "./ParserState";
 import { newHelperTypeName } from "./newHelperTypeName";
 import { parseTypeDefinition } from "./parseTypeDefinition";
@@ -39,7 +39,7 @@ export const tryToParseInlineType = (
   } else if (type === state.typechecker.getFalseType()) {
     state.imports.add("Literal");
     return "Literal[False]"
-  } else if (type === state.typechecker.getAnyType()) {
+  } else if (type === state.typechecker.getAnyType() || ((type.flags & TypeFlags.Unknown) !== 0)) {
     state.imports.add("Any");
     return "Any";
   } else if (type.getFlags() & (ts.TypeFlags.TypeParameter | ts.TypeFlags.TypeVariable)) {
