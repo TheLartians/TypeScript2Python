@@ -4,8 +4,9 @@ import ts from "typescript";
 import path from "path";
 import { program } from "@commander-js/extra-typings";
 import { typeScriptToPython } from "./typeScriptToPython";
+import { Ts2PyConfig } from "./config";
 
-const compile = (fileNames: string[]) => {
+const compile = (fileNames: string[], config: Ts2PyConfig) => {
   const program = ts.createProgram(fileNames, {
     noEmit: true,
     allowJs: true,
@@ -21,16 +22,17 @@ const compile = (fileNames: string[]) => {
         .reduce((a, b) => a || b),
     );
 
-  const transpiled = typeScriptToPython(program.getTypeChecker(), relevantSourceFiles)
+  const transpiled = typeScriptToPython(program.getTypeChecker(), relevantSourceFiles, config)
   console.log(transpiled);
 }
 
 program
   .name("typescript2python")
   .description("A program that converts TypeScript type definitions to Python")
+  .option("--nullable-optionals", "if set, optional entries in dictionaries will be nullable, e.g. `NotRequired[Optional[T]]`")
   .arguments("<input...>")
-  .action(args => {
-    compile(args)
+  .action((args, options) => {
+    compile(args, options)
   })
   .parse(process.argv)
 

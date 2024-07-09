@@ -1,4 +1,5 @@
 import ts from "typescript";
+import { Ts2PyConfig } from "./config";
 
 export type ParserState = {
   helperCount: number;
@@ -6,9 +7,10 @@ export type ParserState = {
   typechecker: ts.TypeChecker;
   knownTypes: Map<ts.Type | string, string>;
   imports: Set<string>;
+  config: Ts2PyConfig;
 };
 
-export const createNewParserState = (typechecker: ts.TypeChecker): ParserState => {
+export const createNewParserState = (typechecker: ts.TypeChecker, config: Ts2PyConfig): ParserState => {
   const knownTypes = new Map<ts.Type, string>();
   knownTypes.set(typechecker.getVoidType(), "None");
   knownTypes.set(typechecker.getUndefinedType(), "None");
@@ -22,5 +24,6 @@ export const createNewParserState = (typechecker: ts.TypeChecker): ParserState =
     typechecker,
     knownTypes,
     imports: new Set(),
+    config,
   };
 }

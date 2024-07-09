@@ -19,7 +19,7 @@ export const parseInlineType = (state: ParserState, type: ts.Type) => {
  * strings match. 
  **/
 const getCanonicalTypeName = (state: ParserState, type: ts.Type) => {
-  const tmpState = createNewParserState(state.typechecker);
+  const tmpState = createNewParserState(state.typechecker, state.config);
   parseTypeDefinition(tmpState, "TS2PyTmpType", type);
   return tmpState.statements.join("\n")
 }

@@ -45,7 +45,7 @@ from typing_extensions import Any, Dict, List, Literal, NotRequired, Optional, T
 class Foo(TypedDict):
   type: Literal["foo"]
   foo: List[float]
-  optional: NotRequired[Optional[str]]
+  optional: NotRequired[str]
 
 class Ts2PyHelperType1(TypedDict):
   foo: Foo
@@ -89,8 +89,15 @@ TypeScript2Python supports many of TypeScripts type constructs, including:
 - Unions, `string | number`
 - Arrays, `boolean[]`
 - Nested objects `{ bar: { foo: string } }`, that will get transpiled into helper dictionaries
-- Optional properties `{ optional?: number }`, that get transpiled to `NotRequired[Optional[...]]` attributes
+- Optional properties `{ optional?: number }`, that get transpiled to `NotRequired[...]` attributes
 - Docstrings `/** this is very useful */`
+
+## Transpilation options
+
+### Nullable optionals
+
+In TypeScript objects, optional values can also be set to `undefined`. By default we assume the according Python
+type to be non-nullable, but a more closely matching behavior can be achieved using the flag `--nullable-optionals`.  
 
 ## Limitations
 
