@@ -22,9 +22,11 @@ describe("transpiling referenced types", () => {
       );
     }
 
-    const transpiled = typeScriptToPython(program.getTypeChecker(), [
-      barSource,
-    ]);
+    const transpiled = typeScriptToPython(
+      program.getTypeChecker(),
+      [barSource],
+      {},
+    );
     expect(transpiled).toEqual(
       `from typing_extensions import TypedDict
 
