@@ -18,11 +18,11 @@ export const parseProperty = (state: ParserState, symbol: ts.Symbol) => {
 
   if (symbol.flags & ts.SymbolFlags.Optional) {
     state.imports.add("NotRequired");
-    if (state.config.nonNullOptionals) {
-      return `${name}: NotRequired[${definition}]${documentationSuffix}`;
-    } else {
+    if (state.config.nullableOptionals) {
       state.imports.add("Optional");
       return `${name}: NotRequired[Optional[${definition}]]${documentationSuffix}`;
+    } else {
+      return `${name}: NotRequired[${definition}]${documentationSuffix}`;
     }
   } else {
     return `${name}: ${definition}${documentationSuffix}`;

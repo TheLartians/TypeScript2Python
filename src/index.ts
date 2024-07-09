@@ -29,7 +29,7 @@ const compile = (fileNames: string[], config: Ts2PyConfig) => {
 program
   .name("typescript2python")
   .description("A program that converts TypeScript type definitions to Python")
-  .option("--non-null-optionals", "if set, optional entries in dictionaries will not be `NotRequired[T]` instead of `NotRequired[Optional[T]]`")
+  .option("--nullable-optionals", "if set, optional entries in dictionaries will be nullable, e.g. `NotRequired[Optional[T]]`")
   .arguments("<input...>")
   .action((args, options) => {
     compile(args, options)
