@@ -92,12 +92,13 @@ TypeScript2Python supports many of TypeScripts type constructs, including:
 - Optional properties `{ optional?: number }`, that get transpiled to `NotRequired[...]` attributes
 - Docstrings `/** this is very useful */`
 
-## Transpilation options
+## Transpiler options
 
 ### Nullable optionals
 
 In TypeScript objects, optional values can also be set to `undefined`. By default we assume the according Python
-type to be non-nullable, but a more closely matching behavior can be achieved using the flag `--nullable-optionals`.  
+type to be non-nullable, but a more closely matching behavior can be achieved using the flag `--nullable-optionals`.
+This will result in optional entries beeing transpiled as `NotRequired[Optional[T]]` instead of `NotRequired[T]`.
 
 ## Limitations
 
