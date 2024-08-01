@@ -72,4 +72,11 @@ class A(TypedDict):
       `class A(TypedDict):\n  foo: NotRequired[Optional[str]]`,
     );
   });
+
+  it("transpiles records as dicts", async () => {
+    const result = await transpileString(
+      `export type A = Record<"foo" | "bar", number>`,
+    );
+    expect(result).toContain(`class A(TypedDict):\n  foo: float\n  bar: float`);
+  });
 });
