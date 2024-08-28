@@ -40,14 +40,14 @@ export type TupleType = [string, Foo | Bar, any[]]
 ### TypeScript2Python
 
 ```python
-from typing_extensions import Any, Dict, List, Literal, NotRequired, Optional, Tuple, TypedDict, Union
+from typing_extensions import Any, Dict, List, Literal, NotRequired, Tuple, TypedDict, Union
 
 class Foo(TypedDict):
   type: Literal["foo"]
   foo: List[float]
   optional: NotRequired[str]
 
-class Ts2PyHelperType1(TypedDict):
+class Ts2Py_tliGTOBrDv(TypedDict):
   foo: Foo
 
 class Bar(TypedDict):
@@ -56,7 +56,7 @@ class Bar(TypedDict):
   """
   type: Literal["bar"]
   bar: str
-  nested: Ts2PyHelperType1
+  nested: Ts2Py_tliGTOBrDv
   """
   nested objects need extra declarations in Python
   """

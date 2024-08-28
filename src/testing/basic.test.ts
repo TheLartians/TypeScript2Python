@@ -73,5 +73,3 @@ describe("transpiling basic types", () => {
     expect(result).toContain("Exported = float");
   });
 });
-
-export type T = Record<string, string>;
