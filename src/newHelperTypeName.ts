@@ -13,6 +13,8 @@ export const newHelperTypeName = (state: ParserState, type: ts.Type) => {
   let shortHash = fullHash.digest("base64").replace(/\W/g, '').substring(0, 10);
   if (state.helperTypeNames.has(shortHash) && state.helperTypeNames.get(shortHash) !== type) {
     shortHash = "HelperType" + state.helperTypeNames.size.toString();
+  } else {
+    state.helperTypeNames.set(shortHash, type);
   }
   return `Ts2Py_${shortHash}`;
 };
