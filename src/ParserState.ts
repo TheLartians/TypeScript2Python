@@ -2,10 +2,11 @@ import ts from "typescript";
 import { Ts2PyConfig } from "./config";
 
 export type ParserState = {
-  helperCount: number;
   statements: string[];
   typechecker: ts.TypeChecker;
   knownTypes: Map<ts.Type | string, string>;
+  helperTypeNames: Map<string, ts.Type>;
+  canonicalTypeNames: Map<ts.Type, string>;
   imports: Set<string>;
   config: Ts2PyConfig;
 };
@@ -20,10 +21,11 @@ export const createNewParserState = (typechecker: ts.TypeChecker, config: Ts2PyC
 
   return {
     statements: [],
-    helperCount: 0,
     typechecker,
     knownTypes,
     imports: new Set(),
+    helperTypeNames: new Map(),
+    canonicalTypeNames: new Map(),
     config,
   };
 }
