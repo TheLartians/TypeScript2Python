@@ -1,7 +1,8 @@
 import ts, { TypeFlags } from "typescript";
-import { ParserState, createNewParserState } from "./ParserState";
+import { ParserState } from "./ParserState";
 import { newHelperTypeName } from "./newHelperTypeName";
 import { parseTypeDefinition } from "./parseTypeDefinition";
+import { getCanonicalTypeName } from "./canonicalTypeName";
 
 export const parseInlineType = (state: ParserState, type: ts.Type) => {
   const result = tryToParseInlineType(state, type);
@@ -11,18 +12,6 @@ export const parseInlineType = (state: ParserState, type: ts.Type) => {
     throw new Error(`could not parse type`);
   }
 };
-
-/** 
- * A function that creates a unique string for a given interface or object type,
- * from a fresh parser state. This should return the same string for two semantically
- * identically types, allowing us to re-use existing helper types if the generated
- * strings match. 
- **/
-const getCanonicalTypeName = (state: ParserState, type: ts.Type) => {
-  const tmpState = createNewParserState(state.typechecker, state.config);
-  parseTypeDefinition(tmpState, "TS2PyTmpType", type);
-  return tmpState.statements.join("\n")
-}
 
 export const tryToParseInlineType = (
   state: ParserState,

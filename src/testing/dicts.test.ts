@@ -43,11 +43,11 @@ describe("transpiling dictionaries types", () => {
       extra: number,
     }`);
     expect(result).toContain(
-      `class Ts2PyHelperType1(TypedDict):
+      `class Ts2Py_FOZhdT9ykh(TypedDict):
   inner: str
 
 class A(TypedDict):
-  outer: Ts2PyHelperType1
+  outer: Ts2Py_FOZhdT9ykh
   extra: float`,
     );
   });
