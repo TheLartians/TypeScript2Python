@@ -14,6 +14,7 @@ export type ParserState = {
 export const createNewParserState = (typechecker: ts.TypeChecker, config: Ts2PyConfig): ParserState => {
   const knownTypes = new Map<ts.Type, string>();
   knownTypes.set(typechecker.getVoidType(), "None");
+  knownTypes.set(typechecker.getNullType(), "None");
   knownTypes.set(typechecker.getUndefinedType(), "None");
   knownTypes.set(typechecker.getStringType(), "str");
   knownTypes.set(typechecker.getBooleanType(), "bool");
