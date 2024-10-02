@@ -7,6 +7,7 @@ describe("transpiling basic types", () => {
     ["export type T = string;", "T = str"],
     ["export type T = undefined;", "T = None"],
     ["export type T = void;", "T = None"],
+    ["export type T = null;", "T = None"],
     [
       "export type T = true;",
       "from typing_extensions import Literal\n\nT = Literal[True]",
