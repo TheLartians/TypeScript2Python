@@ -6,13 +6,14 @@ This project implements a transpiler for creating [pyright](https://github.com/m
 This is useful in a number of scenarios.
 For example:
 
-- Automatic generation of type-safe APIs between Node.js and Python services
 - Safely use JSON objects created by TypeScript projects in Python
-- A nice way to write complex Python types using TypeScript 
+- Automatic generation of type-safe APIs between Node.js and Python applications
+- An easy way to write complex Python typings using TypeScript
 
 ## Example
 
 ### TypeScript
+
 ```ts
 export type Foo = {
     type: "foo"
@@ -102,8 +103,8 @@ This will result in optional entries beeing transpiled as `NotRequired[Optional[
 
 ## Limitations
 
-We currently do not support the following features:
+The main focus of this project is transpiling type definitions for serializable data (e.g. JSON objects), and the following is not planned to be supported:
 
-- Generics, as they cannot be fully supported by Python
-- Function signatures, as we restrict ourselves top serializable data
-- Values, as this is an extremely difficult problem and we currently only attempt to transpile types
+- Generics, as TypeScript's type system is much more powerful than Python's
+- Function signatures, as we restrict ourselves to serializable data
+- Anything that isn't a type definition
