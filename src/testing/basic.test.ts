@@ -57,6 +57,11 @@ describe("transpiling basic types", () => {
       "export type T = number | string | Record<string, boolean>",
       "from typing_extensions import Dict, Union\n\nT = Union[str,float,Dict[str,bool]]",
     ],
+    [
+      "export type T = number | undefined",
+      // without strict mode the `undefined` gets lost here
+      "T = float",
+    ],
   ])("transpiles %p to %p", async (input, expected) => {
     const result = await transpileString(input);
     expect(result).toEqual(expected);
