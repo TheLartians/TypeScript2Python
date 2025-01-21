@@ -64,7 +64,16 @@ class A(TypedDict):
     expect(result).toContain(`class A(TypedDict):\n  foo: NotRequired[str]`);
   });
 
-  it.only("transpiles optional values with non-null optionals as NotRequired[T]", async () => {
+  it("transpiles optional values as NotRequired[Optional[T]] in strict mode", async () => {
+    const result = await transpileString(
+      `export type A = { foo?: string }`,
+      {},
+      { strict: true },
+    );
+    expect(result).toContain(`class A(TypedDict):\n  foo: NotRequired[str]`);
+  });
+
+  it("transpiles optional values with non-null optionals as NotRequired[T]", async () => {
     const result = await transpileString(`export type A = { foo?: string }`, {
       nullableOptionals: true,
     });
