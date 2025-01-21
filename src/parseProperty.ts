@@ -11,13 +11,14 @@ export const parseProperty = (state: ParserState, symbol: ts.Symbol) => {
   const documentationSuffix = documentation
     ? `\n  """\n  ${documentation.replaceAll("\n", "\n  ")}\n  """`
     : "";
-  const definition = parseInlineType(
-    state,
-    state.typechecker.getTypeOfSymbol(symbol),
-  );
-
-  if (symbol.flags & ts.SymbolFlags.Optional) {
-    state.imports.add("NotRequired");
+    
+    if (symbol.flags & ts.SymbolFlags.Optional) {
+      state.imports.add("NotRequired");
+      const definition = parseInlineType(
+        state,
+        // since the entry is already options, the inner type can be non-nullable
+        state.typechecker.getNonNullableType(state.typechecker.getTypeOfSymbol(symbol)),
+      );
     if (state.config.nullableOptionals) {
       state.imports.add("Optional");
       return `${name}: NotRequired[Optional[${definition}]]${documentationSuffix}`;
@@ -25,6 +26,11 @@ export const parseProperty = (state: ParserState, symbol: ts.Symbol) => {
       return `${name}: NotRequired[${definition}]${documentationSuffix}`;
     }
   } else {
+    const definition = parseInlineType(
+      state,
+      // since the entry is already options, the inner type can be non-nullable
+      state.typechecker.getTypeOfSymbol(symbol),
+    );
     return `${name}: ${definition}${documentationSuffix}`;
   }
 };
