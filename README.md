@@ -95,6 +95,10 @@ TypeScript2Python supports many of TypeScripts type constructs, including:
 
 ## Transpiler options
 
+### Strict
+
+Use the `--strict` flag to enable all strict type-checking options to ensure `undefined` and `null` properties are not ignored during transpilation.
+
 ### Nullable optionals
 
 In TypeScript objects, optional values can also be set to `undefined`. By default we assume the according Python

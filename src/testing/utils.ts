@@ -8,9 +8,13 @@ import { createProject, ts } from "@ts-morph/bootstrap";
  **/
 let globalProject: ReturnType<typeof createProject> | undefined;
 
+/** Each file should get a unique name to avoid issues. */
+let i = 0;
+
 export const transpileString = async (
   code: string,
   config: Ts2PyConfig = {},
+  compilerOptions: ts.CompilerOptions = {},
 ) => {
   if (globalProject === undefined) {
     globalProject = createProject({
@@ -19,11 +23,14 @@ export const transpileString = async (
   }
 
   const project = await globalProject;
-  const fileName = `source.ts`;
+  const fileName = `source_${i++}.ts`;
 
   // instead of adding a new source file for each program, we update the existing one.
   const sourceFile = project.updateSourceFile(fileName, code);
-  const program = project.createProgram();
+  const program = project.createProgram({
+    rootNames: [fileName],
+    options: { ...project.compilerOptions, ...compilerOptions },
+  });
   const diagnostics = ts.getPreEmitDiagnostics(program);
 
   if (diagnostics.length > 0) {
