@@ -1,6 +1,6 @@
 import ts from "typescript";
 import { ParserState } from "./ParserState";
-import { parseProperty } from "./parseProperty";
+import { getDocumentationStringForDict, parseProperty, parsePropertyForDict } from "./parseProperty";
 import { getDocumentationStringForType } from "./getDocumentationStringForType";
 import { tryToParseInlineType } from "./parseInlineType";
 import { isValidPythonIdentifier } from "./isValidPythonIdentifier";
@@ -25,18 +25,40 @@ export const parseTypeDefinition = (
     state.statements.push(definition);
   } else {
     state.imports.add("TypedDict");
-
-    const properties = type
+    
+    const allKeysAreValidPythonIdentifiers = type
       .getProperties()
-      .filter((v) => isValidPythonIdentifier(v.getName()))
-      .map((v) => parseProperty(state, v));
+      .map((v) => isValidPythonIdentifier(v.getName()))
+      .reduce((a,b) => a&&b, true);
 
-      const definition = `class ${name}(TypedDict):${
-      documentation
-        ? `\n  """\n  ${documentation.replaceAll("\n", "  \n")}\n  """`
-        : ""
-    }\n  ${properties.length > 0 ? properties.join(`\n  `) : "pass"}`;
+    if (allKeysAreValidPythonIdentifiers) {
+      const properties = type
+        .getProperties()
+        .map((v) => parseProperty(state, v));
+  
+        const definition = `class ${name}(TypedDict):${
+        documentation
+          ? `\n  """\n  ${documentation.replaceAll("\n", "  \n")}\n  """`
+          : ""
+      }\n  ${properties.length > 0 ? properties.join(`\n  `) : "pass"}`;
+      state.statements.push(definition);
+    } else {
+      const properties = type
+        .getProperties()
+        .map((v) => parsePropertyForDict(state, v));
 
-    state.statements.push(definition);
+      const propertyDocumentation = type
+        .getProperties()
+        .map((v) => getDocumentationStringForDict(state, v))
+        .filter(v => v !== undefined)
+        .join("\n");
+
+      const innerDocstring = documentation?.replaceAll("\n", "  \n") + (propertyDocumentation.length > 0 ? "\n## Entries\n" + propertyDocumentation : "");
+      const docstring = innerDocstring.length > 0 ? `\n"""\n${innerDocstring}\n"""` : "";
+      const definition = `${name} = TypedDict(${JSON.stringify(name)}, {\n  ${properties.join(",\n  ")}\n})${docstring}`;
+
+      state.statements.push(definition);
+    }
+
   }
 };
