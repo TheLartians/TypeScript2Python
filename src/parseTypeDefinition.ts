@@ -45,17 +45,20 @@ export const parseTypeDefinition = (
     } else {
       const properties = type
         .getProperties()
+        // empty strings are not allowed for keys in TypedDicts
+        .filter(v => v.getName() !== "");
+
+      const parsedProperties = properties
         .map((v) => parsePropertyForDict(state, v));
 
-      const propertyDocumentation = type
-        .getProperties()
+      const propertyDocumentation = properties
         .map((v) => getDocumentationStringForDict(state, v))
         .filter(v => v !== undefined)
         .join("\n");
 
       const innerDocstring = documentation?.replaceAll("\n", "  \n") + (propertyDocumentation.length > 0 ? "\n## Entries\n" + propertyDocumentation : "");
       const docstring = innerDocstring.length > 0 ? `\n"""\n${innerDocstring}\n"""` : "";
-      const definition = `${name} = TypedDict(${JSON.stringify(name)}, {\n  ${properties.join(",\n  ")}\n})${docstring}`;
+      const definition = `${name} = TypedDict(${JSON.stringify(name)}, {\n  ${parsedProperties.join(",\n  ")}\n})${docstring}`;
 
       state.statements.push(definition);
     }
