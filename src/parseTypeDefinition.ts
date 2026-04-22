@@ -1,4 +1,4 @@
-import ts, { TypeFlags } from "typescript";
+import ts from "typescript";
 import { ParserState } from "./ParserState";
 import {
   getDocumentationStringForDict,
