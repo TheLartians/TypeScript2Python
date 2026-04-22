@@ -76,7 +76,7 @@ export const getDocumentationStringForDict = (
     .join("  \n");
 
   if (documentation.length > 0) {
-    return `${JSON.stringify(name)}: ${documentation}`;
+    return `\`${JSON.stringify(name)}\`: ${documentation}`;
   } else {
     return undefined;
   }

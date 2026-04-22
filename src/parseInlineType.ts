@@ -72,6 +72,9 @@ export const tryToParseInlineType = (
     // there is no way to represent template literals in Python,
     // so we fallback to string
     return "str";
+  } else if (type.flags & TypeFlags.ESSymbol) {
+    state.imports.add("Any");
+    return "Any";
   } else {
     // assume interface or object, we need to create a helper type
     if (!globalScope) {

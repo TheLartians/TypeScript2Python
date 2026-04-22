@@ -133,8 +133,8 @@ A = TypedDict("A", {
 """
 This is A
 ## Entries
-"foo.bar": this is foo.bar
-"a/b": this is a/b
+- \`"foo.bar"\`: this is foo.bar
+- \`"a/b"\`: this is a/b
 """`);
   });
 });

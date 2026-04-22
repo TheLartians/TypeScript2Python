@@ -59,10 +59,11 @@ export const parseTypeDefinition = (
       const propertyDocumentation = properties
         .map((v) => getDocumentationStringForDict(state, v))
         .filter((v) => !!v)
+        .map((v) => `- ${v}`.replaceAll("\n", "\n  "))
         .join("\n");
 
       const innerDocstring =
-        (documentation ?? "").replaceAll("\n", "  \n") +
+        (documentation ?? "").replaceAll("\n", "\n  ") +
         (propertyDocumentation.length > 0
           ? "\n## Entries\n" + propertyDocumentation
           : "");
