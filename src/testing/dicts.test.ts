@@ -100,6 +100,18 @@ class A(TypedDict):
     );
   });
 
+  it("ignores empty string property names in functional dicts", async () => {
+    const result = await transpileString(`export type A = {
+      "": string,
+      "foo.bar"?: string,
+    }`);
+    expect(result).toContain(
+      `A = TypedDict("A", {
+  "foo.bar": NotRequired[str]
+})`,
+    );
+  });
+
   it("moves the key/value docstrings to the object docstring in the functional syntax", async () => {
     const result = await transpileString(`
       /** This is A */
