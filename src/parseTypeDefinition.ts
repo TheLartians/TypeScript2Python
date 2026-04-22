@@ -53,11 +53,12 @@ export const parseTypeDefinition = (
 
       const propertyDocumentation = properties
         .map((v) => getDocumentationStringForDict(state, v))
-        .filter(v => v !== undefined)
+        .filter(v => !!v)
         .join("\n");
 
-      const innerDocstring = documentation?.replaceAll("\n", "  \n") + (propertyDocumentation.length > 0 ? "\n## Entries\n" + propertyDocumentation : "");
+      const innerDocstring = (documentation ?? "").replaceAll("\n", "  \n") + (propertyDocumentation.length > 0 ? "\n## Entries\n" + propertyDocumentation : "");
       const docstring = innerDocstring.length > 0 ? `\n"""\n${innerDocstring}\n"""` : "";
+
       const definition = `${name} = TypedDict(${JSON.stringify(name)}, {\n  ${parsedProperties.join(",\n  ")}\n})${docstring}`;
 
       state.statements.push(definition);

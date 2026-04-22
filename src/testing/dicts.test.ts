@@ -93,8 +93,10 @@ class A(TypedDict):
     const result = await transpileString(`export type A = {
       "foo.bar"?: string,
     }`);
-    expect(result).toContain(
-      `A = TypedDict("A", {
+    expect(result).toEqual(
+      `from typing_extensions import NotRequired, TypedDict
+
+A = TypedDict("A", {
   "foo.bar": NotRequired[str]
 })`,
     );
