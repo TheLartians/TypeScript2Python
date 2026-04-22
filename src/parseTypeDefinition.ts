@@ -29,7 +29,7 @@ export const parseTypeDefinition = (
     const allKeysAreValidPythonIdentifiers = type
       .getProperties()
       .map((v) => isValidPythonIdentifier(v.getName()))
-      .reduce((a,b) => a&&b);
+      .reduce((a,b) => a&&b, true);
 
     if (allKeysAreValidPythonIdentifiers) {
       const properties = type
@@ -55,7 +55,7 @@ export const parseTypeDefinition = (
 
       const innerDocstring = documentation?.replaceAll("\n", "  \n") + (propertyDocumentation.length > 0 ? "\n## Entries\n" + propertyDocumentation : "");
       const docstring = innerDocstring.length > 0 ? `\n"""\n${innerDocstring}\n"""` : "";
-      const definition = `${name} = TypedDict(${JSON.stringify(name)}, { ${properties.join(", ")} })${docstring}`;
+      const definition = `${name} = TypedDict(${JSON.stringify(name)}, {\n  ${properties.join(",\n  ")}\n})${docstring}`;
 
       state.statements.push(definition);
     }

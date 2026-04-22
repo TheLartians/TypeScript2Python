@@ -94,7 +94,9 @@ class A(TypedDict):
       "foo.bar"?: string,
     }`);
     expect(result).toContain(
-      `A = TypedDict("A", { "foo.bar": NotRequired[str] })`,
+      `A = TypedDict("A", {
+  "foo.bar": NotRequired[str]
+})`,
     );
   });
 
@@ -109,8 +111,11 @@ class A(TypedDict):
         "undocumented": string,
       }
     `);
-    expect(result)
-      .toContain(`A = TypedDict("A", { "foo.bar": str, "a/b": float, "undocumented": str })
+    expect(result).toContain(`A = TypedDict("A", {
+  "foo.bar": str,
+  "a/b": float,
+  "undocumented": str
+})
 """
 This is A
 ## Entries
