@@ -5,10 +5,10 @@ describe("transpiling referenced types", () => {
   it("can refer to types defined in other files", async () => {
     const project = await createProject();
 
-    project.createSourceFile("foo.ts", `export type Foo = { foo: number }`);
+    project.createSourceFile("foo.ts", "export type Foo = { foo: number }");
     const barSource = project.createSourceFile(
       "bar.ts",
-      `import {Foo} from './foo';\nexport type Bar = {foo: Foo}`,
+      "import {Foo} from './foo';\nexport type Bar = {foo: Foo}",
     );
 
     const program = project.createProgram();
@@ -79,7 +79,7 @@ class Bar(TypedDict):
       [commonSource],
       {},
     );
-    expect(transpiled).toContain(`publicFoo: Literal["foo"]`);
-    expect(transpiled).toContain(`publicBar: Literal["bar"]`);
+    expect(transpiled).toContain('publicFoo: Literal["foo"]');
+    expect(transpiled).toContain('publicBar: Literal["bar"]');
   });
 });

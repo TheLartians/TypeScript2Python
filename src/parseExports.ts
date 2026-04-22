@@ -1,7 +1,6 @@
 import ts from "typescript";
 import { ParserState } from "./ParserState";
 import { parseTypeDefinition } from "./parseTypeDefinition";
-import { Ts2PyConfig } from "./config";
 
 export function parseExports(state: ParserState, sourceFile: ts.SourceFile) {
   for (const statement of sourceFile.statements) {

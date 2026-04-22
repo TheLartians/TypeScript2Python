@@ -3,7 +3,7 @@ import { transpileString } from "./utils";
 describe("transpiling generic types", () => {
   it("does not transpile generic types", async () => {
     const transpiled = await transpileString(
-      `export type Generic<T extends string> = T;`,
+      "export type Generic<T extends string> = T;",
     );
     expect(transpiled).toContain("Generic = object");
   });

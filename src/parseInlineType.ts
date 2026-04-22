@@ -19,19 +19,25 @@ export const tryToParseInlineType = (
   globalScope?: boolean,
 ): string | undefined => {
   const known = state.knownTypes.get(type);
-  
+
   if (known !== undefined) {
     return known;
   } else if (type === state.typechecker.getTrueType()) {
     state.imports.add("Literal");
-    return "Literal[True]"
+    return "Literal[True]";
   } else if (type === state.typechecker.getFalseType()) {
     state.imports.add("Literal");
-    return "Literal[False]"
-  } else if (type === state.typechecker.getAnyType() || ((type.flags & TypeFlags.Unknown) !== 0)) {
+    return "Literal[False]";
+  } else if (
+    type === state.typechecker.getAnyType() ||
+    (type.flags & TypeFlags.Unknown) !== 0
+  ) {
     state.imports.add("Any");
     return "Any";
-  } else if (type.getFlags() & (ts.TypeFlags.TypeParameter | ts.TypeFlags.TypeVariable)) {
+  } else if (
+    type.getFlags() &
+    (ts.TypeFlags.TypeParameter | ts.TypeFlags.TypeVariable)
+  ) {
     // we don't support types with generic type parameters
     return `object`;
   } else if (type.isLiteral()) {
@@ -66,6 +72,9 @@ export const tryToParseInlineType = (
     // there is no way to represent template literals in Python,
     // so we fallback to string
     return "str";
+  } else if (type.flags & TypeFlags.ESSymbol) {
+    state.imports.add("Any");
+    return "Any";
   } else {
     // assume interface or object, we need to create a helper type
     if (!globalScope) {

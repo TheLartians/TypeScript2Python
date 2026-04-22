@@ -16,19 +16,18 @@ export const transpileString = async (
   config: Ts2PyConfig = {},
   compilerOptions: ts.CompilerOptions = {},
 ) => {
-  if (globalProject === undefined) {
-    globalProject = createProject({
-      useInMemoryFileSystem: true,
-    });
-  }
+  globalProject ??= createProject({
+    useInMemoryFileSystem: true,
+  });
 
   const project = await globalProject;
-  const fileName = `source_${i++}.ts`;
+  const fileName = `source_${String(i++)}.ts`;
 
   // instead of adding a new source file for each program, we update the existing one.
   const sourceFile = project.updateSourceFile(fileName, code);
   const program = project.createProgram({
     rootNames: [fileName],
+
     options: { ...project.compilerOptions, ...compilerOptions },
   });
   const diagnostics = ts.getPreEmitDiagnostics(program);
