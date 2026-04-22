@@ -65,7 +65,9 @@ export const getDocumentationStringForDict = (state: ParserState, symbol: ts.Sym
   const documentation = symbol
     .getDocumentationComment(state.typechecker)
     .map((v) => v.text)
+    .filter(v => !!v)
     .join("  \n");
+  
   if (documentation.length > 0) {
     return `${JSON.stringify(name)}: ${documentation}`
   } else {
