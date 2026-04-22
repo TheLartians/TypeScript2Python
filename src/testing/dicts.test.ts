@@ -6,7 +6,7 @@ describe("transpiling dictionaries types", () => {
       foo: string,
       bar: number,
     }`);
-    expect(result).toContain(`class A(TypedDict):\n  foo: str\n  bar: float`);
+    expect(result).toContain("class A(TypedDict):\n  foo: str\n  bar: float");
   });
 
   it("keeps docstrings", async () => {
@@ -54,39 +54,39 @@ class A(TypedDict):
 
   it("can transpile intersections", async () => {
     const result = await transpileString(
-      `export type A = { foo: string } & { bar: number }`,
+      "export type A = { foo: string } & { bar: number }",
     );
-    expect(result).toContain(`class A(TypedDict):\n  foo: str\n  bar: float`);
+    expect(result).toContain("class A(TypedDict):\n  foo: str\n  bar: float");
   });
 
   it("transpiles optional values as NotRequired[T]", async () => {
-    const result = await transpileString(`export type A = { foo?: string }`);
-    expect(result).toContain(`class A(TypedDict):\n  foo: NotRequired[str]`);
+    const result = await transpileString("export type A = { foo?: string }");
+    expect(result).toContain("class A(TypedDict):\n  foo: NotRequired[str]");
   });
 
   it("transpiles optional values as NotRequired[T] in strict mode", async () => {
     const result = await transpileString(
-      `export type A = { foo?: string }`,
+      "export type A = { foo?: string }",
       {},
       { strict: true },
     );
-    expect(result).toContain(`class A(TypedDict):\n  foo: NotRequired[str]`);
+    expect(result).toContain("class A(TypedDict):\n  foo: NotRequired[str]");
   });
 
   it("transpiles optional values with non-null optionals as NotRequired[Optional[T]]", async () => {
-    const result = await transpileString(`export type A = { foo?: string }`, {
+    const result = await transpileString("export type A = { foo?: string }", {
       nullableOptionals: true,
     });
     expect(result).toContain(
-      `class A(TypedDict):\n  foo: NotRequired[Optional[str]]`,
+      "class A(TypedDict):\n  foo: NotRequired[Optional[str]]",
     );
   });
 
   it("transpiles records as dicts", async () => {
     const result = await transpileString(
-      `export type A = Record<"foo" | "bar", number>`,
+      'export type A = Record<"foo" | "bar", number>',
     );
-    expect(result).toContain(`class A(TypedDict):\n  foo: float\n  bar: float`);
+    expect(result).toContain("class A(TypedDict):\n  foo: float\n  bar: float");
   });
 
   it("falls back to the functional syntax if keys are unsupported", async () => {

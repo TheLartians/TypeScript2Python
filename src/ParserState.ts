@@ -11,7 +11,10 @@ export type ParserState = {
   config: Ts2PyConfig;
 };
 
-export const createNewParserState = (typechecker: ts.TypeChecker, config: Ts2PyConfig): ParserState => {
+export const createNewParserState = (
+  typechecker: ts.TypeChecker,
+  config: Ts2PyConfig,
+): ParserState => {
   const knownTypes = new Map<ts.Type, string>();
   knownTypes.set(typechecker.getVoidType(), "None");
   knownTypes.set(typechecker.getNullType(), "None");
@@ -29,4 +32,4 @@ export const createNewParserState = (typechecker: ts.TypeChecker, config: Ts2PyC
     canonicalTypeNames: new Map(),
     config,
   };
-}
+};
