@@ -68,6 +68,10 @@ export const tryToParseInlineType = (
       // TODO: figure out why we reach this and replace with correct type definition
       return `object`;
     }
+  } else if (type.flags & TypeFlags.TemplateLiteral) {
+    // there is no way to represent template literals in Python,
+    // so we fallback to string
+    return "str";
   } else {
     // assume interface or object, we need to create a helper type
     if (!globalScope) {

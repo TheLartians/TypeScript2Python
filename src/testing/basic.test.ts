@@ -61,6 +61,7 @@ describe("transpiling basic types", () => {
       "export type T = number | undefined",
       "from typing_extensions import Union\n\nT = Union[None,float]",
     ],
+    ["export type T = `a.b.${string}`", "T = str"],
   ])("transpiles %p to %p", async (input, expected) => {
     const result = await transpileString(input);
     expect(result).toEqual(expected);
