@@ -59,12 +59,12 @@ class A(TypedDict):
     expect(result).toContain(`class A(TypedDict):\n  foo: str\n  bar: float`);
   });
 
-  it("transpiles optional values as NotRequired[Optional[T]]", async () => {
+  it("transpiles optional values as NotRequired[T]", async () => {
     const result = await transpileString(`export type A = { foo?: string }`);
     expect(result).toContain(`class A(TypedDict):\n  foo: NotRequired[str]`);
   });
 
-  it("transpiles optional values as NotRequired[Optional[T]] in strict mode", async () => {
+  it("transpiles optional values as NotRequired[T] in strict mode", async () => {
     const result = await transpileString(
       `export type A = { foo?: string }`,
       {},
@@ -73,7 +73,7 @@ class A(TypedDict):
     expect(result).toContain(`class A(TypedDict):\n  foo: NotRequired[str]`);
   });
 
-  it("transpiles optional values with non-null optionals as NotRequired[T]", async () => {
+  it("transpiles optional values with non-null optionals as NotRequired[Optional[T]]", async () => {
     const result = await transpileString(`export type A = { foo?: string }`, {
       nullableOptionals: true,
     });
@@ -87,5 +87,35 @@ class A(TypedDict):
       `export type A = Record<"foo" | "bar", number>`,
     );
     expect(result).toContain(`class A(TypedDict):\n  foo: float\n  bar: float`);
+  });
+
+  it("falls back to the functional syntax if keys are unsupported", async () => {
+    const result = await transpileString(`export type A = {
+      "foo.bar"?: string,
+    }`);
+    expect(result).toContain(
+      `A = TypedDict("A", { "foo.bar": NotRequired[str] })`,
+    );
+  });
+
+  it("moves the key/value docstrings to the object docstring in the functional syntax", async () => {
+    const result = await transpileString(`
+      /** This is A */
+      export type A = {
+        /** this is foo.bar */
+        "foo.bar": string,
+        /** this is a/b */
+        "a/b": number,
+        "undocumented": string,
+      }
+    `);
+    expect(result)
+      .toContain(`A = TypedDict("A", { "foo.bar": str, "a/b": float, "undocumented": str })
+"""
+This is A
+## Entries
+"foo.bar": this is foo.bar
+"a/b": this is a/b
+"""`);
   });
 });
