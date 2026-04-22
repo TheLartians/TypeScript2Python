@@ -47,7 +47,8 @@
     "build": "babel --extensions .ts --ignore '**/*.test.ts' ./src -d dist --source-maps",
     "test": "jest",
     "typecheck": "tsc -p . --noEmit",
-    "prepack": "yarn build"
+    "prepack": "yarn build",
+    "typescript2python": "yarn --silent single src/index.ts"
   },
   "bin": {
     "typescript2python": "./dist/index.js"
