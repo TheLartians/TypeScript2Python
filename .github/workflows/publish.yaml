@@ -1,8 +1,11 @@
-
 on:
-  push:
-    branches: [ main ]
-        
+  release:
+    types: [created]
+
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -10,15 +13,28 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
+          registry-url: 'https://registry.npmjs.org'
           node-version-file: '.nvmrc'
           cache: 'yarn'
-    
+
       - name: install
         run: yarn install
 
-      - name: Publish
-        if: github.ref == 'refs/heads/main'
-        uses: Github-Actions-Community/merge-release@v6.0.7
+      - name: Update package.json version to match tag
+        run: |
+          TAG_VERSION="${GITHUB_REF#refs/tags/}"
+          # Remove leading 'v' if present in tag
+          if [[ "$TAG_VERSION" == v* ]]; then
+            TAG_VERSION="${TAG_VERSION:1}"
+          fi
+          node -e "
+            const fs = require('fs');
+            const pkg = require('./package.json');
+            pkg.version = process.env.TAG_VERSION;
+            fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2) + '\n');
+          " 
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+          TAG_VERSION: ${{ github.ref_name }}
+
+      - name: publish
+        run: npm publish
