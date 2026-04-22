@@ -62,7 +62,7 @@ describe("transpiling basic types", () => {
       // without strict mode the `undefined` gets lost here
       "T = float",
     ],
-    ["export type T = `a.b.${string}`", "T = string"],
+    ["export type T = `a.b.${string}`", "T = str"],
   ])("transpiles %p to %p", async (input, expected) => {
     const result = await transpileString(input);
     expect(result).toEqual(expected);
