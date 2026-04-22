@@ -3,7 +3,6 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      cooldown: 
       interval: "monthly"
     assignees:
       - "TheLartians"
