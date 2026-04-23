@@ -62,7 +62,10 @@ describe("transpiling basic types", () => {
       "from typing_extensions import Union\n\nT = Union[None,float]",
     ],
     ["export type T = `a.b.${string}`", "T = str"],
-    ["export type T = symbol", "from typing_extensions import Any\n\nT = Any"],
+    [
+      "export type T = symbol",
+      'from typing_extensions import NewType\n\nTs2Py_symbol_0 = NewType("Ts2Py_symbol_0", object)\n\nT = Ts2Py_symbol_0',
+    ],
   ])("transpiles %p to %p", async (input, expected) => {
     const result = await transpileString(input);
     expect(result).toEqual(expected);
@@ -92,5 +95,22 @@ describe("transpiling basic types", () => {
     expect(result).not.toContain("NotExported");
     expect(result).not.toContain("exported");
     expect(result).toContain("Exported = float");
+  });
+
+  it("re-uses existing symbol definitions", async () => {
+    const result = await transpileString(`
+      const a = Symbol("a") 
+      const b = Symbol("b") 
+      export type T1 = symbol;
+      export type T2 = symbol;
+      export type T3 = typeof a; 
+      export type T4 = symbol; 
+      export type T5 = typeof b; 
+    `);
+    expect(result).toContain(`T1 = Ts2Py_symbol_0`);
+    expect(result).toContain(`T2 = Ts2Py_symbol_0`);
+    expect(result).toContain(`T3 = Ts2Py_symbol_1`);
+    expect(result).toContain(`T4 = Ts2Py_symbol_0`);
+    expect(result).toContain(`T5 = Ts2Py_symbol_2`);
   });
 });
