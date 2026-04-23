@@ -1,6 +1,9 @@
 import ts, { TypeFlags } from "typescript";
 import { ParserState } from "./ParserState";
-import { newHelperTypeName } from "./newHelperTypeName";
+import {
+  newHashedHelperTypeName,
+  newIndexedHelperTypeName,
+} from "./newHelperTypeName";
 import { parseTypeDefinition } from "./parseTypeDefinition";
 import { getCanonicalTypeName } from "./canonicalTypeName";
 
@@ -72,9 +75,20 @@ export const tryToParseInlineType = (
     // there is no way to represent template literals in Python,
     // so we fallback to string
     return "str";
-  } else if (type.flags & TypeFlags.ESSymbol) {
-    state.imports.add("Any");
-    return "Any";
+  } else if (type.flags & TypeFlags.ESSymbolLike) {
+    const knownType = state.knownTypes.get(type);
+    if (state.knownTypes.has(type)) {
+      return knownType;
+    } else {
+      // we must create a new type to represent the symbol
+      state.imports.add("NewType");
+      const name = newIndexedHelperTypeName(state, type, "symbol");
+      state.statements.push(
+        `${name} = NewType(${JSON.stringify(name)}, object)`,
+      );
+      state.knownTypes.set(type, name);
+      return name;
+    }
   } else {
     // assume interface or object, we need to create a helper type
     if (!globalScope) {
@@ -85,7 +99,7 @@ export const tryToParseInlineType = (
         return semanticallyIdenticalType;
       } else {
         // we must create a new type
-        const helperName = newHelperTypeName(state, type);
+        const helperName = newHashedHelperTypeName(state, type);
         parseTypeDefinition(state, helperName, type);
         state.knownTypes.set(canonicalName, helperName);
         return helperName;

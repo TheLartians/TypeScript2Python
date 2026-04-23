@@ -3,7 +3,7 @@ import ts from "typescript";
 import { createHash } from "node:crypto";
 import { getCanonicalTypeName } from "./canonicalTypeName";
 
-export const newHelperTypeName = (state: ParserState, type: ts.Type) => {
+export const newHashedHelperTypeName = (state: ParserState, type: ts.Type) => {
   // to keep helper type names predictable and not dependent on the order of definition,
   // we use the first 10 characters of a sha256 hash of the type. If there is an unexpected
   // collision, we fallback to using an incrementing counter.
@@ -22,4 +22,20 @@ export const newHelperTypeName = (state: ParserState, type: ts.Type) => {
     state.helperTypeNames.set(shortHash, type);
   }
   return `Ts2Py_${shortHash}`;
+};
+
+const getIndexedName = (i: number, prefix: string) => `Ts2Py_${prefix}_${i}`;
+
+export const newIndexedHelperTypeName = (
+  state: ParserState,
+  type: ts.Type,
+  prefix: string,
+) => {
+  let i = 0;
+  while (state.helperTypeNames.has(getIndexedName(i, prefix))) {
+    i += 1;
+  }
+  const name = getIndexedName(i, prefix);
+  state.helperTypeNames.set(name, type);
+  return name;
 };
